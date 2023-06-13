@@ -77,8 +77,16 @@ const submitBookButton = document.querySelector(".submit-book-btn");
 const addBookModal = document.querySelector(".modal");
 const overlay = document.querySelector(".overlay");
 
+const titleErroBox = document.querySelector('.title-validaion-error');
+const authorErroBox = document.querySelector('.author-validaion-error');
+const pagesErroBox = document.querySelector('.pages-validaion-error');
+
 const openModal = function () {
   addBookForm.reset()
+  titleErroBox.textContent = '';
+  authorErroBox.textContent = '';
+  pagesErroBox.textContent = '';
+
   addBookModal.classList.remove("hidden");
   overlay.classList.remove("hidden");
 };
@@ -101,18 +109,57 @@ const updateBooksGrid = function () {
     createBookCard(book)
   }
 }
-// function that takes form inputs and returns the new instance of a book
-const bookInstanceFromInput = function () {
-  const title = document.querySelector('#book-title').value
-  const author = document.querySelector('#book-author').value
-  const pages = document.querySelector('#book-pages').value
-  const read = document.querySelector('#book-read').checked
-  return new Book(title, author, pages, read)
+
+
+const fieldValidation = function () {
+  
 }
+
+
+
 
 const submitBook = function (e) {
   e.preventDefault()
-  const newBook = bookInstanceFromInput()
+  const titleField = document.querySelector('#book-title');
+  if (titleField.validity.tooLong) {
+    titleErroBox.textContent = 'Title is too long';
+  } else if (titleField.validity.valueMissing) {
+    titleErroBox.textContent = 'Must provide title'
+  } else {
+    titleErroBox.textContent = '';
+  }
+
+  const authorField = document.querySelector('#book-author');
+  if (authorField.validity.tooLong) {
+    authorErroBox.textContent = 'Author name is too long';
+  } else if (authorField.validity.valueMissing) {
+    authorErroBox.textContent = 'Must provide book author'
+  } else {
+    authorErroBox.textContent = '';
+  }
+
+  const pagesField = document.querySelector('#book-pages');
+  if (pagesField.validity.rangeOverflow) {
+    pagesErroBox.textContent = 'Value too big';
+  } else if (pagesField.validity.valueMissing) {
+    pagesErroBox.textContent = 'Must provide pages count'
+  } else if (pagesField.validity.rangeUnderflow) {
+    pagesErroBox.textContent = 'Value cannot be negative';
+  } else {
+    pagesErroBox.textContent = '';
+  }
+
+  if (!pagesField.validity.valid || !authorField.validity.valid || !titleField.validity.valid) {
+    return
+  }
+
+  const readField = document.querySelector('#book-read');
+
+  const title = titleField.value
+  const author = authorField.value
+  const pages = pagesField.value
+  const read = readField.checked
+  const newBook = new Book(title, author, pages, read)
   library.addBook(newBook)
   updateBooksGrid()
   closeModal()

@@ -24,9 +24,12 @@
   <section class="modal hidden">
     <form class="add-book-form">
       <p>Add new book</p>
-      <input type="text" name="book-title" id="book-title" placeholder="Book title" required>
-      <input type="text" name="book-author" id="book-author" placeholder="Book author" required>
-      <input type="number" name="book-pages" id="book-pages" placeholder="Book pages" required min="1">
+      <input type="text" name="book-title" id="book-title" placeholder="Book title" required maxlength="150">
+      <div class="title-validaion-error validaion-error"></div>
+      <input type="text" name="book-author" id="book-author" placeholder="Book author" required maxlength="50">
+      <div class="author-validaion-error validaion-error"></div>
+      <input type="number" name="book-pages" id="book-pages" placeholder="Book pages" required min="1" max="5000">
+      <div class="pages-validaion-error validaion-error"></div>
       <label for="book-read"><input type="checkbox" name="book-read" id="book-read"> Have you read it?</label>
       <input type="submit" class="submit-book-btn" value="Add book">
     </form>
